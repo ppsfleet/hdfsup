@@ -15,8 +15,8 @@ class File
         console.log(this.processqueue)
         if(this.processqueue[pid])
         {
-            res = this.processqueue[pid]
-            res.delete("process")
+            let res = this.processqueue[pid]
+            delete(res["process"])
             return res
         }
         else
@@ -93,7 +93,13 @@ class File
                 }
             }
             else
-                this.spawnHadoop(idCmd)
+                this.processqueue[idCmd] = 
+                {
+                    'process':sshProcess,
+                    'cmd':'ssh hadoop',
+                    'running':0,
+                    'error':0
+                }
         });
 
         sshProcess.stdout.on('data', (data) => {
