@@ -12,11 +12,19 @@ const Child_process = require('child_process');
 const BodyParser = require('body-parser')
 
 const app = Express();
-app.use(function(req, res, next) {
-    res.header("Access-Control-Allow-Origin", "*");
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-  });
+app.use((request, response, next) => {
+    response.set({
+        'Access-Control-Allow-Origin': '*',
+        'Access-Control-Allow-Methods': 'DELETE,GET,PATCH,POST,PUT',
+        'Access-Control-Allow-Headers': 'Content-Type,Authorization'
+    });
+    // intercept OPTIONS method
+    if(request.method === 'OPTIONS') {
+        response.send(200);
+    } else {
+        next();
+    }
+});
 
 var Spawn = Child_process.spawn;
 var jsonParser = BodyParser.json()
@@ -27,13 +35,13 @@ const Config = require('./config');
 currentfiles = new File(Config)
 
 app.get('/', 
-    function (req, res) 
+    function (req, res,next) 
     {
         res.send("<h1>welcome !</h1>");
     })
 
 app.get('/file',
-    function(req, res)
+    function(req, res,next)
     {
         if(req.query.path != null)
         {
@@ -56,7 +64,7 @@ app.get('/file',
     })
 
 app.get('/status',
-    function(req, res)
+    function(req, res,next)
     {
         if(req.query.pid != null)
         {
