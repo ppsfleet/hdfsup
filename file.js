@@ -56,7 +56,7 @@ class File
                 }
             }
             else
-                this.spawnHadoop(idCmd,filePath)
+                this.spawnHadoop(idCmd,filePath.split("/").pop())
         });
 
         scpProcess.stdout.on('data', (data) => {

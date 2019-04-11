@@ -9,17 +9,22 @@ http://localhost:3000/File?path=01.flac&biblio=phone => adele mp3
 const Express = require('express')
 //const Fs = require('fs');
 const Child_process = require('child_process');
-var Spawn = Child_process.spawn;
-const app = Express();
 const BodyParser = require('body-parser')
 
+const app = Express();
+app.use(function(req, res, next) {
+    res.header("Access-Control-Allow-Origin", "*");
+    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
+    next();
+  });
+
+var Spawn = Child_process.spawn;
 var jsonParser = BodyParser.json()
 var urlencodedParser = BodyParser.urlencoded({ extended: false })   
 
 const File = require('./file');
 const Config = require('./config');
 currentfiles = new File(Config)
-console.log("plouf")
 
 app.get('/', 
     function (req, res) 
