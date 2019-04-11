@@ -71,7 +71,7 @@ class File
     spawnHadoop(idCmd,filePath)
     {
         "hadoop fs -put toto.txt /user/darbouxtom/toto.txt"
-        var args = [this.config.user+"@"+this.config.server, "'hadoop fs -put "+filePath+" /user/"+this.config.user+"/"+filePath+"'"]
+        var args = [this.config.user+"@"+this.config.server, "'hadoop fs -put -f "+filePath+" /user/"+this.config.user+"/"+filePath+"'"]
         console.log(args.join())
         var sshProcess = Spawn("/usr/bin/ssh", args,{'detached':true,shell:true})
         this.processqueue[idCmd] = 
@@ -98,7 +98,8 @@ class File
                     'process':sshProcess,
                     'cmd':'ssh hadoop',
                     'running':0,
-                    'error':0
+                    'error':0,
+                    'url':"/user/"+this.config.user+"/"+filePath,
                 }
         });
 
